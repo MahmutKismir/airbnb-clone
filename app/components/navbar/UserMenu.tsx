@@ -7,7 +7,16 @@ import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 
-const UserMEnu = () => {
+import { signOut } from "next-auth/react";
+import { SafeUser } from "@/app/types";
+
+interface UserMemuProps {
+  currentUser?: SafeUser | null
+}
+
+const UserMenu: React.FC<UserMemuProps> = ({
+  currentUser
+}) => {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
   const [isOpen, setIsOpen] = useState(false);
@@ -38,10 +47,23 @@ const UserMEnu = () => {
       {isOpen && (
         <div className="absolute rounded-xl shadow-md w-[40vm] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer">
-            <>
+            {currentUser ? (
+              <>
+              <MenuItem onClick={() => {}} label="My trips" />
+              <MenuItem onClick={() => {}} label="My favorites" />
+              <MenuItem onClick={() => {}} label="My reservations" />
+              <MenuItem onClick={() => {}} label="My properties" />
+              <MenuItem onClick={() => {}} label="Airbnb my home" />
+              <hr />
+              <MenuItem onClick={() => signOut()} label="Logout" />
+            </>
+            ): (
+              <>
               <MenuItem onClick={loginModal.onOpen} label="Login" />
               <MenuItem onClick={registerModal.onOpen} label="Sign up" />
             </>
+            )}
+            
           </div>
         </div>
       )}
@@ -49,4 +71,4 @@ const UserMEnu = () => {
   );
 };
 
-export default UserMEnu;
+export default UserMenu;
